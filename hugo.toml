@@ -18,7 +18,7 @@ description = "Carlos Almeida's personal website"
 keywords = "blog,developer,personal"
 info = ["Software & Hardware Engineer","Maker", "Part-time mechanic"]
 avatarURL = "images/avatar.jpg"
-#gravatar = "john.doe@example.com"
+#gravatar = ""
 dateFormat = "January 2, 2006"
 since = 2019
 # Git Commit in Footer, uncomment the line below to enable it
