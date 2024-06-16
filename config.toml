@@ -141,24 +141,23 @@ weight = 4
 url = "https://www.linkedin.com/in/carlos-almeida-7b595599/"
 
 [[params.social]]
-name = "Medium"
-icon = "fa-brands fa-medium fa-2x"
-weight = 5
-url = "https://medium.com/@johndoe"
+name = "Printables"
+icon = "fa-solid fa-gears fa-2x"
+weight = 6
+url = "https://www.printables.com/@CarlosAlmeida_773671"
 
 [[params.social]]
-name = "RSS"
-icon = "fa-solid fa-rss fa-2x"
+name = "Instructables"
+icon = "fa-solid fa-robot fa-2x"
 weight = 6
-url = "https://myhugosite.com/index.xml"
-rel = "alternate"
-type = "application/rss+xml"
+url = "https://www.instructables.com/member/Carlos_Almeida/"
+
 
 [languages.en]
 languageName = ":uk:"
 
 [[languages.en.menu.main]]
-name = "About"
+name = "CV"
 weight = 1
 url = "about/"
 
