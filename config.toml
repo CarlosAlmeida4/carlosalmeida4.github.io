@@ -157,19 +157,24 @@ url = "https://www.instructables.com/member/Carlos_Almeida/"
 languageName = ":uk:"
 
 [[languages.en.menu.main]]
-name = "CV"
+name = "Now"
 weight = 1
-url = "curriculum/index.html"
+url = "posts/"
 
 [[languages.en.menu.main]]
-name = "Blog"
+name = "Posts"
 weight = 2
-url = "posts/"
+url = "Posts/"
 
 [[languages.en.menu.main]]
 name = "Projects"
 weight = 3
 url = "projects/"
+
+[[languages.en.menu.main]]
+name = "CV"
+weight = 4
+url = "curriculum/index.html"
 
 [[languages.en.menu.main]]
 name = "Contact me"
