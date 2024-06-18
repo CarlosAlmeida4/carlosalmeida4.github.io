@@ -159,7 +159,7 @@ languageName = ":uk:"
 [[languages.en.menu.main]]
 name = "Now"
 weight = 1
-url = "posts/"
+url = "now/"
 
 [[languages.en.menu.main]]
 name = "Posts"
