@@ -41,7 +41,7 @@ customCSS = []
 customSCSS = []
 
 # Custom JS
-customJS = [js/custom.js]
+customJS = []
 
 # Custom remote JS files
 customRemoteJS = []
