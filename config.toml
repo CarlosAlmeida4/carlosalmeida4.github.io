@@ -41,7 +41,7 @@ customCSS = []
 customSCSS = []
 
 # Custom JS
-customJS = []
+customJS = [js/custom.js]
 
 # Custom remote JS files
 customRemoteJS = []
@@ -137,20 +137,21 @@ url = "https://github.com/CarlosAlmeida4"
 [[params.social]]
 name = "LinkedIn"
 icon = "fa-brands fa-linkedin fa-2x"
-weight = 4
+weight = 2
 url = "https://www.linkedin.com/in/carlos-almeida-7b595599/"
 
 [[params.social]]
 name = "Printables"
 icon = "fa-solid fa-gears fa-2x"
-weight = 6
+weight = 3
 url = "https://www.printables.com/@CarlosAlmeida_773671"
 
 [[params.social]]
 name = "Instructables"
 icon = "fa-solid fa-robot fa-2x"
-weight = 6
+weight = 4
 url = "https://www.instructables.com/member/Carlos_Almeida/"
+
 
 
 [languages.en]
@@ -164,7 +165,7 @@ url = "now/"
 [[languages.en.menu.main]]
 name = "Posts"
 weight = 2
-url = "Posts/"
+url = "posts/"
 
 [[languages.en.menu.main]]
 name = "Projects"

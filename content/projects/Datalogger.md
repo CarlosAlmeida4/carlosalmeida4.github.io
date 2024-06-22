@@ -35,8 +35,10 @@ The layout is fully customizable, which means you can chose what you're seeing a
 
 I will be writing posts about the progress [here][Posts] and will do an instructables in the near future so keep an eye on it.
 
+
+
 [dr2_logger]: https://github.com/ErlerPhilipp/dr2_logger
 [WalnutTheCherno]: https://youtu.be/-NJDxf4XwlQ
 [Walnut]: https://github.com/StudioCherno/Walnut
 [ASAM_MDF]: https://www.asam.net/standards/detail/mdf/
-[Posts]: /Posts/
+[Posts]: /posts/
