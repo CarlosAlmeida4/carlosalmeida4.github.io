@@ -274,6 +274,9 @@ void EASportsWRC::receiveData()
 
 }
 ```
+
+# How to read the telemetry
+
 To de-serialize the dataframe, the following enum is defined:
 
 ```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
