@@ -7,6 +7,8 @@ categories: ["Projects"]
 draft: false
 ---
 
+# Posts
+1. [UDP link to EA Sports WRC][udpeasportswrc]
 
 # Intro
 EASports WRC is a rally sim racing game developed by EA, its the successor of the Dirt Rally series and a pretty cool game to play
@@ -42,3 +44,4 @@ I will be writing posts about the progress [here][Posts] and will do an instruct
 [Walnut]: https://github.com/StudioCherno/Walnut
 [ASAM_MDF]: https://www.asam.net/standards/detail/mdf/
 [Posts]: /posts/
+[udpeasportswrc]:/posts/udpeasportswrc/
