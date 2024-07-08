@@ -4,7 +4,7 @@ date: "2024-06-23"
 slug: "UDPEASportsWRC"
 tags: ["SimRacing", "Software"]
 categories: ["Software"]
-series: ["UDPDatalogger"]
+series: ["EASportsWRC datalogger"]
 draft: false
 ---
 
