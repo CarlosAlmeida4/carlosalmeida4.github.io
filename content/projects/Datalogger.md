@@ -10,6 +10,7 @@ draft: false
 # Posts
 1. [UDP link to EA Sports WRC][udpeasportswrc]
 2. [Driver input widget][inputwindow]
+3. [Brake Pedal and Brake Temperature][BrakeStageAndData]
 # Intro
 EASports WRC is a rally sim racing game developed by EA, its the successor of the Dirt Rally series and a pretty cool game to play
 As my day to day job is in automotive, I have a special interest in sim racing games.
@@ -37,8 +38,24 @@ The layout is fully customizable, which means you can chose what you're seeing a
 
 I will be writing posts about the progress [here][Posts] and will do an instructables in the near future so keep an eye on it.
 
+Here are some of the windows available:
+
+{{< figure src="/images/DataSignals.png" alt="All signals display" caption="All signals display" width="100%" >}}
+The signal plots allow the user to check available signals of the current run or older runs (by uploading an YAML file)
+You can configure the number of plots in whatever configuration suits you.
+
+The Stage status serves as a control panel it shows the current stage time, the distance until the stage end and has two buttons.
+{{< figure src="/images/StageStatusAndControl.png" alt="Control Panel" caption="Control Panel" width="100%" >}}
+The `Store Run` button allows the user to store the current run into an YAML file. The `Clear Run` button allows the user to clear the current data, in case you want a reset.
+
+The vehicle position allow the user to have an Idea of where you are on the stage. At the end of a run it should look similar to the trace of the stage at the game menu.
+
+{{< figure src="/images/VehiclePosition.png" alt="Vehicle Position" caption="Vehicle Position" width="100%" >}}
 
 
+If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
+
+[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
 [dr2_logger]: https://github.com/ErlerPhilipp/dr2_logger
 [WalnutTheCherno]: https://youtu.be/-NJDxf4XwlQ
 [Walnut]: https://github.com/StudioCherno/Walnut
@@ -46,3 +63,4 @@ I will be writing posts about the progress [here][Posts] and will do an instruct
 [Posts]: /posts/
 [udpeasportswrc]:/posts/udpeasportswrc/
 [inputwindow]:/posts/EASportsWRCDriverInput/
+[BrakeStageAndData]:/posts/BrakeStageAndSignals/

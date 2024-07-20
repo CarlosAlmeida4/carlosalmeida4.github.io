@@ -348,6 +348,10 @@ enum class EAoffset_t : uint16_t {
 Now with this its possible to get the correct data from the dataframe and store it in whatever structure we want to use it
 you can find the full project in the [github repo]
 
+If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
+
+[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
+
 [patch]: https://www.overtake.gg/downloads/wrc-telemetry-patch.38991/
 [November 2023]: https://answers.ea.com/t5/Guides-Documentation/EA-SPORTS-WRC-How-to-use-User-Datagram-Protocol-UDP-on-PC/m-p/13178407/thread-id/1
 [github repo]: https://github.com/CarlosAlmeida4/UPD_Datalogger

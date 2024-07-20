@@ -17,6 +17,9 @@ I've written a full [instructables] post on how to build it and you can find all
 - [Github]
 - [Printables]
 
+If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
+
+[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
 
 [instructables]: https://www.instructables.com/A-Sequential-Gear-Shifter-for-Simracing/
 [Github]: https://github.com/CarlosAlmeida4/StandaloneShifter
