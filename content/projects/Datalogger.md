@@ -55,7 +55,7 @@ The vehicle position allow the user to have an Idea of where you are on the stag
 
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
-[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
+[buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [dr2_logger]: https://github.com/ErlerPhilipp/dr2_logger
 [WalnutTheCherno]: https://youtu.be/-NJDxf4XwlQ
 [Walnut]: https://github.com/StudioCherno/Walnut

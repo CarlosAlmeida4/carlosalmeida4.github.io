@@ -118,7 +118,6 @@ The heat map is very intuitive to use, it just needs the right matrix as input a
 ```
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
-[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
-
+[buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 
 [project webpage]:/projects/ea-sports-wrc-datalogger/

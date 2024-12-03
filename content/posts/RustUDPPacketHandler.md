@@ -342,7 +342,7 @@ fn parse_packet(buffer: &[u8]) -> Result<TelemetryData, &'static str> {
 
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
-[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
+[buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 
 [simrallyshifter]: /projects/simracingshifter
 

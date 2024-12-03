@@ -89,7 +89,7 @@ void DataClientLayer::OnUIRender()
 ```
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
-[buymeacoffee]: buymeacoffee.com/Carlos4lmeida
+[buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 
 [Dear ImGui]:https://www.dearimgui.com/
 [project webpage]:/projects/ea-sports-wrc-datalogger/
