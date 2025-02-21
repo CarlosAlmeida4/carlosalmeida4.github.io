@@ -5,7 +5,7 @@ slug: "RustHIDCommunication"
 tags: ["SimRacing", "Software"]
 categories: ["Software","Rust","USB"] 
 series: ["EASportsWRC datalogger Rust"]
-draft: true
+draft: false
 ---
 ### Previous Work
 This is a continuation of the work I developed previously in [Rust UDP packet receiver & Handler][RUST UDP Communication]
@@ -17,38 +17,40 @@ The shifter connects to the computer via a USB interface and is defined as a [HI
 ### Concept
 Overall the target is simple, receive data from UDP, chose what I need, send it as a HID message.
 
-```goat 
-.---------------.     .-.     .---.
-| UDP Telemetry +--->| 1 |<---+ B |
-'---------------'     '-'     '---'
-```
-```goat 
-+-------------------+                           ^                      .---.
-|    A Box          |__.--.__    __.-->         |      .-.             |   |
-|                   |        '--'               v     | * |<---        |   |
-+-------------------+                                  '-'             |   |
-                       Round                                       *---(-. |
-  .-----------------.  .-------.    .----------.         .-------.     | | |
- |   Mixed Rounded  | |         |  / Diagonals  \        |   |   |     | | |
- | & Square Corners |  '--. .--'  /              \       |---+---|     '-)-'       .--------.
- '--+------------+-'  .--. |     '-------+--------'      |   |   |       |        / Search /
-    |            |   |    | '---.        |               '-------'       |       '-+------'
-    |<---------->|   |    |      |       v                Interior                 |     ^
-    '           <---'      '----'   .-----------.              ---.     .---       v     |
- .------------------.  Diag line    | .-------. +---.              \   /           .     |
- |   if (a > b)     +---.      .--->| |       | |    | Curved line  \ /           / \    |
- |   obj->fcn()     |    \    /     | '-------' |<--'                +           /   \   |
- '------------------'     '--'      '--+--------'      .--. .--.     |  .-.     +Done?+-'
-    .---+-----.                        |   ^           |\ | | /|  .--+ |   |     \   /
-    |   |     | Join        \|/        |   | Curved    | \| |/ | |    \    |      \ /
-    |   |     +---->  o    --o--        '-'  Vertical  '--' '--'  '--  '--'        +  .---.
- <--+---+-----'       |     /|\                                                    |  | 3 |
-                      v                             not:line    'quotes'        .-'   '---'
-  .-.             .---+--------.            /            A || B   *bold*       |        ^
- |   |           |   Not a dot  |      <---+---<--    A dash--is not a line    v        |
-  '-'             '---------+--'          /           Nor/is this.            ---
-```
 
+```goat 
+Game              |Rust Client                                 | Physical
+                  
+                  |                                            |                    
+  
+.-----------.     |  .------------.    .---------------.       |     .-------------.
+|EASportsWRC|        |UDP Listener|    |HID Interaction|             |SimRacing Hub|
+'-----------'     |  '------------'    '---------------'       |     '-------------'
+      |                    |                   |                            |       
+      |Raw Packet |        |                   |               |            |       
+      |------------------->|                   |                            |       
+      |           |        |                   |               |            |       
+      |                    |Telemetry          |                            |       
+      |           |        |------------------>|               |            |       
+      |                    |                   |                            |       
+      |           |        |                   |Selected Gear  |            |       
+      |                    |                   |--------------------------->|       
+      |           |        |                   |               |            |       
+      |                    |  GearUp   GearDown|                            |       
+      |<----------+--------------------------------------------+------------|       
+      |           |        |                   |               |            |
+.-----------.        .------------.    .---------------.             .-------------.
+|EASportsWRC|     |  |UDP Listener|    |HID Interaction|       |     |SimRacing Hub|
+'-----------'        '------------'    '---------------'             '-------------'
+
+```
+Lets go through this sequence diagram.
+Firstly, EASportsWRC sends out a UPD packet containg the game telemetry (I have gone into more detail how this works in previous [posts][udpeasportswrc])
+In my rust client, I run two important threads:
+
+#### UDP Listener -> `start_udp_listener(tx: mpsc::Sender<TelemetryData>)`
+#### HID Interaction  -> `cyclic_hid_interaction(mut device: HidDevice, mut rx: mpsc::Receiver<TelemetryData>)`
 
 [RUST UDP Communication]: /posts/RustUDPPacketHandler
 [HIDDescription]: https://en.wikipedia.org/wiki/Human_interface_device
+[udpeasportswrc]:/posts/udpeasportswrc/
