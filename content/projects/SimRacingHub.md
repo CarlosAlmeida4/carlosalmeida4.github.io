@@ -4,14 +4,22 @@ date: "2025-02-24"
 slug: "SimRacingHub"
 tags: ["SimRacing", "Software","Hardware","3dPrinting"]
 categories: ["Projects"]
-draft: true
+draft: false
 ---
-## Introduction
+
+### Table of contents
+1. [Introduction](#introduction)
+2. [New Features](#new-features)
+3. [Hardware procurement and development](#hardware-procurement-and-development)
+4. [Introduction](#Introduction)
+ 
+
+# Introduction <a name="Introduction"></a>
 The Sim Racing Hub is a new version of my [old Racing Shifter][SinRacingShifter], with some upgrades that I wanted to have in my old setup.
 I really liked the old shift functionality, but to quote Scott Adams 
 > Normal people... believe that if it ain't broke, don't fix it. Engineers believe that if it ain't broke, it doesn't have enough features yet
 
-# New Features
+# New Features 
 ### Better screen display
 The old gear display was a single digit 8 bit display, I want to enhance this a little bit to make it look better, so I had to search for a new solution.
 ### The current gear should be the same as in game
@@ -29,9 +37,35 @@ The board schematic provided by waveshare shows that some of the GPIO pins are u
 Besides the screen, we need the following IOs:
 
 
+| Type   | Pin ID | Usage       |
+|:------:|:------:|:-----------:|
+|  DIO   |    0   | Shift Up    |
+|  DIO   |    1   | Shift Down  |
+|  DIO   |   18   | Reserved    |
+|  DIO   |   19   | Reserved    |
+|  DIO   |   20   | Reserved    |
+|  DIO   |   21   | Reserved    |
+|  ADC   |   26   | ADCReserved2|
+|  ADC   |   27   | ADCReserved1|
+|  ADC   |   28   | ADCHandbrake|
 
-I've written a full [instructables] post on how to build it and you can find all the needed information there, I'll just leave the other interesting links here:
 
+Having defined the IOs, I created a circuit board to handle the inputs. Of course you could just have a switch connected directly to the microcontroller input, however hardware buttons have a tendency to "bounce" quite a bit when activated. To reduce the chances of this bouncing creating multiple edge readings, I implemented a low pass filter on all digital inputs, this is always a good practice for any input really, this way you cut all high frequency interferences that might find their way to the micro input.
+For the ADC signals I created just a voltage divider, this is for when I get around to create the handbrake.
+
+As digital inputs, I sourced the following:
+ * 2 x [Microswitches]
+ * 1 x [Switch]
+ * 1 x [Black pressure button]
+ * 1 x [Red pressure button]
+
+ The microswitches are for the shifter, the other inputs are for further developments.
+
+With this the procurement done, I created the circuit board.
+{{< figure src="/images/PCBBackSimRacingHub.jpg" alt="PCB back" caption="PCB back" width="50%" >}}
+{{< figure src="/images/PCBFrontSimRacingHub.jpg" alt="PCB front" caption="PCB front with waveshare RP2040 board connected" width="50%" >}}
+
+# /******************************In Construction**********************************************************************/
 
 - [Github]
 - [Printables]
@@ -45,3 +79,7 @@ If you like my projects please consider supporting my hobby by [buying me a coff
 [Printables]: https://www.printables.com/model/585572-sim-racing-shifter
 [SinRacingShifter]: projects/SimRacingShifter
 [WaveshareProductLink]: https://www.waveshare.com/wiki/RP2040-LCD-1.28
+[Microswitches]:https://mauser.pt/catalog/product_info.php?products_id=010-0122
+[Switch]: https://mauser.pt/catalog/product_info.php?products_id=010-0172
+[Black pressure button]: https://mauser.pt/catalog/product_info.php?products_id=010-0097
+[Red pressure button]: https://mauser.pt/catalog/product_info.php?products_id=010-0127

@@ -9,7 +9,7 @@ draft: false
 
 The sim racing shifter was my first complete project build envolving 3D printing, Hardware development and Software development
 
-{{< figure src="/images/ShifterPicture.jpg" alt="First Prototype" caption="First Prototype" width="50%" >}}
+{{< figure src="/images/ShifterPicture.JPG" alt="First Prototype" caption="First Prototype" width="50%" >}}
 
 I've written a full [instructables] post on how to build it and you can find all the needed information there, I'll just leave the other interesting links here:
 
