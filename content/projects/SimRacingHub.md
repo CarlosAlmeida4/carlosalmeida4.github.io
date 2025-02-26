@@ -11,7 +11,8 @@ draft: false
 1. [Introduction](#introduction)
 2. [New Features](#new-features)
 3. [Hardware procurement and development](#hardware-procurement-and-development)
-4. [Introduction](#Introduction)
+4. [Housing](#housing)
+5. [Software](#software)
  
 
 # Introduction <a name="Introduction"></a>
@@ -65,7 +66,19 @@ With this the procurement done, I created the circuit board.
 {{< figure src="/images/PCBBackSimRacingHub.jpg" alt="PCB back" caption="PCB back" width="50%" >}}
 {{< figure src="/images/PCBFrontSimRacingHub.jpg" alt="PCB front" caption="PCB front with waveshare RP2040 board connected" width="50%" >}}
 
-# /******************************In Construction**********************************************************************/
+# Housing
+
+
+# Software
+
+This is a distributed system, some of the software runs in the PC running the game and the remaining runs in the raspberry pi.
+In this post I will cover only the embedded software within the raspberry pi, I already went through the PC in this [post]
+
+## Architecture
+
+## HID Communication
+
+## Display
 
 - [Github]
 - [Printables]
@@ -83,3 +96,4 @@ If you like my projects please consider supporting my hobby by [buying me a coff
 [Switch]: https://mauser.pt/catalog/product_info.php?products_id=010-0172
 [Black pressure button]: https://mauser.pt/catalog/product_info.php?products_id=010-0097
 [Red pressure button]: https://mauser.pt/catalog/product_info.php?products_id=010-0127
+[post]: /posts/rusthidcommunication
