@@ -15,7 +15,7 @@ draft: false
 5. [Software](#software)
  
 
-# Introduction <a name="Introduction"></a>
+# Introduction
 The Sim Racing Hub is a new version of my [old Racing Shifter][SinRacingShifter], with some upgrades that I wanted to have in my old setup.
 I really liked the old shift functionality, but to quote Scott Adams 
 > Normal people... believe that if it ain't broke, don't fix it. Engineers believe that if it ain't broke, it doesn't have enough features yet
@@ -67,18 +67,53 @@ With this the procurement done, I created the circuit board.
 {{< figure src="/images/PCBFrontSimRacingHub.jpg" alt="PCB front" caption="PCB front with waveshare RP2040 board connected" width="50%" >}}
 
 # Housing
-
+As mentioned previously, this is a new version of an older project, so if you want more details on the entire build, please go to the [instructables]
+For this version I just altered the base and the housing for the electronics
+{{< figure src="/images/DisplayCase1.jpg"  width="50%" >}}
+The PCB is kept in place by snap fittings I designed in the display case face
+{{< figure src="/images/DisplayCase2.jpg"  width="50%" >}}
+The two holes on the bottom are for the black and red buttons, while the keys on the top give me a way to secure the face to the rest of the housing
+{{< figure src="/images/DisplayCase3.jpg"  width="50%" >}}
+The housing has a hole on the side for the extra switch, the back holes allow access to the PCB headers in case its needed
 
 # Software
 
 This is a distributed system, some of the software runs in the PC running the game and the remaining runs in the raspberry pi.
-In this post I will cover only the embedded software within the raspberry pi, I already went through the PC in this [post]
+In this post I will cover only the embedded software within the RP2040, I already went through the PC in this [post].
+The microcontroller has two functions:
+1. Send shift request to PC
+2. Show current gear in the screen
+
+I developed the project using platformIO beacuse I enjoy the flexibility of it.
+In the next sections I will go through a summary of the architecture, the HID communication and gear display.
 
 ## Architecture
+
+The software project is structured in the following way:
+* IO_inputs: Here all input handling is handled
+* LCD: LCD display driver specific to the screen used
+* ShifterLogic: Handles everything related with gear shifting
+* UI: I used [SquareLine Studio][Squareline] to generate the UI, more on that in a following section
+* UIHandler: handling init and communication with the UI
+* USBComm: Handling the HID communication
+
+The RP2040 is a multicore microcontroller, so we need to split the tasks between both cores, and also its required to share information between both cores.
+The simplest way to share the information is using global variables, since in this application theres only one producer for each of the shared variables the chances to run into deadlocks is very limited.
+Therefore, the Information shared between all tasks is defined within the SharedDatatype structure:
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+typedef volatile struct SharedDatatype
+{
+    uint8_t ShiftUpRequest;
+    uint8_t ShiftDownRequest;
+    uint8_t CurrentGear;
+}SharedData_t;
+```
+As you can see its not much, so the risk of deadlocks is not very high
 
 ## HID Communication
 
 ## Display
+{{< figure src="/images/SquarlineStudioShifter.png"  width="50%" >}}
 
 - [Github]
 - [Printables]
@@ -86,7 +121,7 @@ In this post I will cover only the embedded software within the raspberry pi, I 
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
-
+[Squareline]: https://squareline.io/
 [instructables]: https://www.instructables.com/A-Sequential-Gear-Shifter-for-Simracing/
 [Github]: https://github.com/CarlosAlmeida4/StandaloneShifter
 [Printables]: https://www.printables.com/model/585572-sim-racing-shifter
