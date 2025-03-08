@@ -110,7 +110,40 @@ typedef volatile struct SharedDatatype
 ```
 As you can see its not much, so the risk of deadlocks is not very high
 
+On Core 0 runs the two tasks
+* `IOinput.FastCyclic(&SharedData)` - responsible for handling the inputs and turning it into shift request
+* `USBCommCyclic(&SharedData)` - Handles the HID communication
+Core 1 runs the remaining two
+* `UIHandlerCyclic(&SharedData)` - responsible for the user interface screen
+* `ShiftingLogic.step(&SharedData)` - Handles all logic behind keeping current gear and handling shift up and shift down requests
+
 ## HID Communication
+All HID communications are handled inside the `USBComm` module.
+In order to allow two way communication and also gamepad behavior, I had to make the RP20040 behave as two HID reports. This was achieved by defining two 
+`Adafruit_USBD_HID` objects, one is a gamepad and the other is generic in and out.
+Having two objects means that theres a chance different OSs and different games do not know how to handle this specific case. In windows 11 for example, the joystick game controller cannot display properly the inputs. In EASportsWRC, The first try to map always fail, but once you do a second mapping the game recognizes the correct HID report.
+
+The generic inout HID is callback based for receiving communications. This is configurable through the `.setReportCallback` method from Adafruit USB HID:
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+void USBCommSet_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
+{
+  // This example doesn't use multiple report and report ID
+  (void) report_id;
+  (void) report_type;
+  //Serial.print("Called Set Report Callback: ");
+  //Serial.println(report_id);
+  if(bufsize <= MAX_PACKET_SIZE)
+  {
+    memcpy(ReceivedPacket,buffer,MAX_PACKET_SIZE);
+  }
+  // echo back anything we received from host
+  usb_hid_inout.sendReport(0, buffer, bufsize);
+}
+```
+`buffer` is the raw packet received via HID while `ReceivedPacket` is a shared buffer between the cyclic Comms task and this callback.
+Theres more code than this, but its just for initialization and overall setup, if you want to see it in detail, take a look at [Github]
+
+
 
 ## Display
 {{< figure src="/images/SquarlineStudioShifter.png"  width="50%" >}}
@@ -123,7 +156,7 @@ If you like my projects please consider supporting my hobby by [buying me a coff
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [Squareline]: https://squareline.io/
 [instructables]: https://www.instructables.com/A-Sequential-Gear-Shifter-for-Simracing/
-[Github]: https://github.com/CarlosAlmeida4/StandaloneShifter
+[Github]: https://github.com/CarlosAlmeida4/SimRacingHub/tree/master
 [Printables]: https://www.printables.com/model/585572-sim-racing-shifter
 [SinRacingShifter]: projects/SimRacingShifter
 [WaveshareProductLink]: https://www.waveshare.com/wiki/RP2040-LCD-1.28
