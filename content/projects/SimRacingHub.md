@@ -146,13 +146,82 @@ Theres more code than this, but its just for initialization and overall setup, i
 
 
 ## Display
+Finally, we get to the user interface development
+For the UI development, I used some available interfaces already created by waveshare to interact with the GV9A01 using the [LovyanGFX]
+For a faster UI development, I wanted to use a GUI designer instead of developing software only. After a quick search, I found out that using [LVGL] would allow me to use [Squareline] Studio for development of the UI.
+
 {{< figure src="/images/SquarlineStudioShifter.png"  width="50%" >}}
+
+The UI is rather simple, It shows only the gear currently selected. Everything related with handling the LVGL and UI is generated, on the `UIHandler` component we just have to handle the API calls.
+The `UIHanlerInit` is called at startup and initializes the LovyanGFX, the LVGL and also the user interface, as shown below.
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+void UIHandlerInit(void)
+{
+    gfx.begin(PIN_LCD_SCLK, PIN_LCD_MOSI, PIN_LCD_DC, PIN_LCD_CS,
+              PIN_LCD_RST, PIN_LCD_BL);
+    lv_init();
+    lv_disp_draw_buf_init( &draw_buf, buf[0], buf[1], screenWidth * 10 );
+    /*Initialize the display*/
+    static lv_disp_drv_t disp_drv;
+    lv_disp_drv_init( &disp_drv );
+    /*Change the following line to your display resolution*/
+    disp_drv.hor_res = screenWidth;
+    disp_drv.ver_res = screenHeight;
+    disp_drv.flush_cb = my_disp_flush;
+    disp_drv.draw_buf = &draw_buf;
+    lv_disp_drv_register( &disp_drv );
+    /*Initialize the input device driver*/
+    static lv_indev_drv_t indev_drv;
+    lv_indev_drv_init( &indev_drv );
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = my_touchpad_read;
+    lv_indev_drv_register( &indev_drv );
+    ui_init();
+}
+
+```
+
+After initialization, `UIHandlerCyclic` is ran cyclically. Inside theres a small logic to transform raw gear data to ASCII characters and a call to the cyclic LVGL function that handles everything UI related.
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+void UIHandlerCyclic(SharedData_t *SharedData)
+{
+    uint8_t gear = SharedData->CurrentGear;
+    //Serial.print("The curent gear is: ");
+    //Serial.println(SharedData->CurrentGear);
+    if(10 == gear)
+    {
+        _ui_label_set_property(uic_CurrentGear,_UI_LABEL_PROPERTY_TEXT,"R");
+    }
+    else if(0 == gear)
+    {
+        _ui_label_set_property(uic_CurrentGear,_UI_LABEL_PROPERTY_TEXT,"N");    
+    }
+    else 
+    {
+        _ui_label_set_property(uic_CurrentGear,_UI_LABEL_PROPERTY_TEXT,String(gear).c_str());    
+    }
+    lv_timer_handler(); /* let the GUI do its work */
+    
+}
+```
+
+
+
+### Conclusion
+Hope you enjoyed reading through this small upgrade to my shifter.
+Any questions you might have feel free to reach out to me, Im available for questions and comments.
+I will upload briefly the 3D printer parts to Printables and also maybe update the instructable (not sure yet if I wont just create a new post there).
+All software is already available in [Github] :smile:
+
 
 - [Github]
 - [Printables]
+- [instructables]
 
 If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
+[LVGL]: https://lvgl.io/
+[LovyanGFX]: https://lovyangfx.readthedocs.io/en/latest/index.html
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [Squareline]: https://squareline.io/
 [instructables]: https://www.instructables.com/A-Sequential-Gear-Shifter-for-Simracing/
