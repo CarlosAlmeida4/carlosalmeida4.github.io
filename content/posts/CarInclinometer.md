@@ -43,7 +43,11 @@ $$
 
 # Screen Design
 As mentioned in the title, LVGL was used to develop the screen. Instead of manually creating the C code, U used the squareline editor.
+
+
 {{< figure src="/images/PajeroProjects/Screeenshot.png" width="50%" >}}
+
+
 The arcs show the roll of the vehicle, going from +45 to -45 degrees, while the center bar shows the pitch of the vehicle.
 For the future, I also want to add other screens with different functionalities, like engine motor temperature measurement. That is why theres a second screen available.
 Also, on the top and bottom I added the real values of pitch and roll, not limited to [-45,+45].
