@@ -45,7 +45,7 @@ $$
 As mentioned in the title, LVGL was used to develop the screen. Instead of manually creating the C code, U used the squareline editor.
 
 
-{{< figure src="/images/PajeroProjects/Screeenshot.png" width="50%" >}}
+{{< figure src="/images/PajeroProjects/Screenshot1.png" width="50%" >}}
 
 
 The arcs show the roll of the vehicle, going from +45 to -45 degrees, while the center bar shows the pitch of the vehicle.
