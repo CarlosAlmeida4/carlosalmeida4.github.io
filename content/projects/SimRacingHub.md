@@ -220,7 +220,7 @@ The final build looks like this:
 As you can see, it looks very similar to the [old Sim racing shifter][SinRacingShifter] (almost seems this a second version of the old one :smile:)
 The biggest difference is the display and control board:
 
-{{< figure src="/images/SimRacingHubControlBoard.jpg" width="75%" >}}
+{{< figure src="/images/SimRacingHubControlBoard1.jpg" width="75%" >}}
 
 ### Conclusion
 Hope you enjoyed reading through this small upgrade to my shifter.
