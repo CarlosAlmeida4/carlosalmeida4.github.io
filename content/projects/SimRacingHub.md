@@ -215,7 +215,7 @@ I screwed up on the first set PCBs, so I ended sending to jobs to be fabricated
 
 The final build looks like this:
 
-{{< figure src="/images/SimRacingHubFullBuild.jpg" width="75%" >}}
+{{< figure src="/images/SimRacingHubFullBuild1.jpg" width="75%" >}}
 
 As you can see, it looks very similar to the [old Sim racing shifter][SinRacingShifter] (almost seems this a second version of the old one :smile:)
 The biggest difference is the display and control board:
