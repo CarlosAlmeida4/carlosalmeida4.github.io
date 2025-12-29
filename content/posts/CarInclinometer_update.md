@@ -5,7 +5,7 @@ slug: "CarInclinometer_update"
 tags: ["LVGL", "Software","RP2350","Car","Vehicle","Watchdog"]
 categories: ["Software"]
 series: ["Pajero"]
-draft: false
+draft: true
 ---
 # Introduction
 This is a continuation of my last post on developing a [Car Inclinometer] Heres the what changed 
