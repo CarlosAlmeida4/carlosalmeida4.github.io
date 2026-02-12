@@ -11,6 +11,9 @@ enableEmoji = true
 [markup.highlight]
 noClasses = false
 
+[markup.goldmark.renderer]
+unsafe = true
+
 [params]
 author = "Carlos Almeida"
 # license = '<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA-4.0</a>'
@@ -42,10 +45,10 @@ customSCSS = []
 math = true
 
 # Custom JS
-customJS = []
+customJS = ["js/mermaid-init.js"]
 
 # Custom remote JS files
-customRemoteJS = []
+customRemoteJS = ["https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"]
 
 # If you want to use fathom(https://usefathom.com) for analytics, add this section
 # [params.fathomAnalytics]

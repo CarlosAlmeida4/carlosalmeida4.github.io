@@ -72,13 +72,38 @@ The beauty of this approach is that:
 ## Sensor Data Processing
 
 Just like in the previous project, the inclinometer relies on processing accelerometer data from the IMU.
-The QMI8658 on the Waveshare board provides raw acceleration vectors. By calculating the angle of the gravity vector relative to the board's axes, I can determine roll and pitch:
+Previously, the calculation was simply done by calculating the angle of the gravity vector relative to the board's axes, with these two simple transformations:
 
 $$roll = \arctan\left(\frac{y}{-x}\right)$$
 
 $$pitch = \arctan\left(\frac{z}{-x}\right)$$
 
+In the new ESP board, the accelerometer is mounted in a different orientation within the board, making the roll and pitch calculation different:
+
+$$roll = \arctan\left(\frac{y}{\sqrt{x^2 + z^2}}\right)$$
+
+
+$$pitch = \arctan\left(\frac{z}{x}\right)$$
+
+
 These values are then scaled to fit the display gauges and text labels in real-time.
+
+## How data is sent to the UI
+To transfer the measured roll and pitch, I rely on the FreeRTOS built in `xQueue` method.
+At startup, both the `qmi8652cInterface` and `Display` object take a queue reference owned by the `system`.
+The queue is filled i
+This queue contains this structure:
+
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+struct RollPitch
+{
+    float roll = 0.0f;
+    float pitch = 0.0f;
+    float temperature = 0.0f;
+};
+```
+
+
 
 ## Project Structure
 
@@ -132,24 +157,104 @@ I used FreeRTOS tasks with queue-based communication to keep the system responsi
 The application logic knows nothing about the UI. Screen updates happen through a clean abstraction layer. This means I can completely redesign the interface without touching the sensor code.
 
 **3. Component-Based Sensors**  
-Each sensor is self-contained. Need to add a magnetometer? Drop in the new component. Want to remove the light sensor to save power? Just rebuild without it.
+Each sensor is self-contained. Need to add a magnetometer? Drop in the new component.
 
-
-## how data is shared between accel and UI
 
 ## Over-The-Air Updates
 
 One powerful feature I built in is OTA (Over-The-Air) update capability. 
-Rather than physically connecting to the device with USB every time you want to update firmware, the ESP32-S3 can automatically check for and install new versions over WiFi.
+Rather than physically connecting to the device with USB every time you want to update firmware, the ESP32-S3 can  install new versions over WiFi.
 
 This was crucial because I wanted the device to be permanently mounted in the vehicle. 
 The OTA system uses the dual-partition scheme - one active partition and one for updates - ensuring you always have a bootable system even if an update fails.
 
-## how events are handled between UI and OTA
+## How events are handled between UI and OTA
+So I already showed you how I shared data between the inclinometer sensor and the UI, but now we have a different challenge, instead of sharing data, we now need to trigger events. I wanted to do this using the least amount of overhead possible, that meant keeping the code in my top level `system` class as minimal as possible.
+As you already saw in the UI image, I created a big ass orange button (*to be fair, the screen is not that big*). I want to trigger the update mechanism via this button.
+So what I want to do:
 
-## Getting Started
 
-If you want to build this yourself:
+{{< mermaid >}}
+sequenceDiagram
+    actor UI
+    participant Display
+    participant OTA Updater
+    participant ESP system
+    activate Display
+    UI->>Display: Trigger Update
+    Display->>UI: "In Progress"
+    Display->>OTA Updater: start Update Task
+    activate OTA Updater 
+    OTA Updater->>UI: "Started"
+    OTA Updater->>ESP system: Configure http ota client
+    activate ESP system
+    OTA Updater->>UI: "Updating"
+    ESP system->> OTA Updater: ESP_OK
+    OTA Updater->>UI: "Rebooting"
+    OTA Updater->>ESP system: restart ESP
+    deactivate OTA Updater
+    deactivate ESP system
+    deactivate Display
+
+{{< /mermaid >}}
+
+Looking at the flowchart it looks simple, now to the actual implementation.
+Both `OTA Updater` and  `Display` are owned and initialized by a top level `system` class. Could I maybe implement a routine where the updater is called directly by display? Sure, but I had two reasons to build it this way.
+1. I want all constructors and initializations to be easily findable in the top class
+2. The OTA updater class right now does more than just software update (It also handles wifi connection)
+
+Due to this, I'm left with a double dependency, `Display` shall be able to trigger a routine in `OTA Updater` which should trigger a member change back in the display.
+After searching for a bit and playing with some solutions, I ended up with using ` std::function<>` as a wrap for the callbacks, as this is exactly one of the uses cases where this template class should be used. It basically wraps a callable object in a class which allows us to pass functions as arguments to other functions, which is exactly what we want to do here.
+
+
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+class Display{
+    std::function<void(lv_event_t* )> m_SoftwareUpdateHandler;
+    //Set at initialization by setSoftwareUpdateHandler
+    void setSoftwareUpdateHandler(std::function<void(lv_event_t* )> callback)
+    {
+        m_SoftwareUpdateHandler = std::move(callback);
+    }
+}
+```
+Now when I call this set function, I can pass as argument the method from my software updating class, the same was done the other way around.
+
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+class OTAUpdater{
+    std::function<void(const std::string&)>  m_SWUpdateFeedbackCallback;
+    //Set at initialization by setSWUpdateFeedback
+    setSWUpdateFeedback(std::function<void(const std::string&)> callback)
+    {
+        m_SWUpdateFeedbackCallback = std::move(callback);
+    }
+}
+```
+Now at system startup, we set the callbacks for both classes:
+
+```cpp {class="my-class" id="my-codeblock" lineNos=inline tabWidth=2}
+class System{
+        /**
+         * Callback setting
+         */
+        display.setSoftwareUpdateHandler(
+            [this](lv_event_t* e)
+            {
+                OTAUpd.triggerUpdate();
+            });
+
+        OTAUpd.setSWUpdateFeedback(
+            [this](const std::string& msg)
+            {
+                display.SWUpdateFeedback(msg);
+            }
+        );
+}
+```
+Using these lambda functions here allow us to have loose coupling between the display and ota classes without having to create complex dependencies.
+
+---
+
+#### If you want to build this yourself:
 
 ### Prerequisites
 - **ESP-IDF** v5.0+ (follow the [official setup guide](https://docs.espressif.com/projects/esp-idf/))
@@ -188,16 +293,13 @@ This framework is designed to be extended. Some ideas:
 - **Sensor fusion**: Combine IMU data with magnetometer for heading information
 - **Data logging**: Record vehicle data to SD card or cloud
 - **Custom gauges**: Build analog-style gauges, progress bars, real-time graphs
-- **Vehicle Integration**: Connect to vehicle CAN bus for engine parameters
+- **Vehicle Integration**: Connect to other vehicle sensors for engine parameters
 
 The modular architecture makes all of this possible without major rewrites.
 
 ## Conclusion
 
-This project represents a significant step forward from my initial RP2040 inclinometer. 
-The combination of LVGL, SquareLine Studio, and ESP-IDF creates a powerful platform for building custom embedded dashboards.
-
-The modular design means you can take what I've built and adapt it for your own projects - whether it's an automotive application, industrial display, IoT dashboard, or home automation interface.
+This project represents a significant step forward from my initial RP2040/RP2350 inclinometer, but not the finished product yet, now we get to the fun part I like to call [Integration Hell][IntegrationHell]. Stay tuned for the next step where I develop the mounting brackets and hardware connections to the vehicle wiring loom.
 
 If you found this project interesting or useful, please consider supporting my work:
 
@@ -207,6 +309,7 @@ The code is available on GitHub and released under MIT license - feel free to us
 
 ---
 
+[IntegrationHell]: https://wiki.c2.com/?IntegrationHell
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [CarInclinometer]: /posts/carinclinometer/
 [WaveshareESP32S3]: https://www.waveshare.com/wiki/ESP32-S3-Touch-AMOLED-1.75
