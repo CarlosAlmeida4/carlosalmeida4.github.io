@@ -5,24 +5,22 @@ slug: "CarTouchScreeMiniDisplayV120"
 tags: ["LVGL", "Software","ESP32","Car","Vehicle","OTA",]
 categories: ["Software"]
 series: ["Pajero"]
-draft: true
+draft: false
 ---
-# Whats new
+# What's new
 
-This is a continuation of my [incinometer][CarInclinometerProject], where I talk about my objective, the software developed and also how I intregated it into my beloved Pajero. 
+This is a continuation of my [inclinometer][CarInclinometerProject], where I talk about my objective, the software developed and also how I integrated it into my beloved Pajero. 
 
-After this work, I still feeled that there were multiple improvements to achieve and some very annoying bugs that dont show up on the test bench and I cannot diagnose due to how random they are.
+After this work, I still felt that there were multiple improvements to achieve and some very annoying bugs that don't show up on the test bench and I cannot diagnose due to how random they are.
 
-So, what did I do? I let scope creep get the better of me, instead of only fixing the issues, I increase the features :smile:
+So, what did I do? I let scope creep get the better of me, instead of only fixing the issues, I increased the features :smile:
 
-Between the version I used for vehicle integration [CarTSmD-v1.0.0], and the current [CarTSmD-v1.2.0] version, alot has changed, here's the list:
+Between the version I used for vehicle integration [CarTSmD-v1.0.0], and the current [CarTSmD-v1.2.0] version, a lot has changed, here's the list:
 
 1. [Fixed multiple issues that could lead to panic and resets]()
 2. [Added a new Inclinometer screen and zero out functionality]()
 3. [Created a new configuration and wifi screens]()
 4. [Added Wifi provisioning and wifi management state machine]()
-5. [Updated OTA server access]()
-6. [Version String]()
 
 ## Fix the panic!
 
@@ -43,9 +41,9 @@ After these changes, the random panics disappeared completely, and the system ha
 
 ### Where is Ground?
 
-One of the issues that I didnt consider before goint into the car was that the actual display would be slightly tilted, which in hindsight makes sense, because the displays are skewed towards the better angle to the user.
+One of the issues that I didn't consider before going into the car was that the actual display would be slightly tilted, which in hindsight makes sense, because the displays are skewed towards the better angle to the user.
 
-Another reason is the mounting, its plastic and has a bit of play, which means that the screen might appear a bit tilted, but not much that I would consider a brand new plastic support.
+Another reason is the mounting; it's plastic and has a bit of play, which means that the screen might appear a bit tilted, but not much that I would consider a brand new plastic support.
 
 **So, how did I fix this?**
 
@@ -61,7 +59,7 @@ out.pitch = atan2(acc.z, acc.x) * RAD_TO_DEG;
 out.roll  -= RPOffset.roll;
 out.pitch -= RPOffset.pitch;
 ```
-the `RPOffset` is nothing more than a set of roll and pitch I grabed while on a horizontal plane and stored in the NVM.
+The `RPOffset` is nothing more than a set of roll and pitch I grabbed while on a horizontal plane and stored in the NVM.
 
 The data flow diagram for this use case looks like this:
 
@@ -114,7 +112,7 @@ So in short, the flash storage and retrieve is done in the following way:
 4. Return as `std::optional<RollPitch>` (null if not found)
 5. Close NVS handle
 
-For this use case, the `std::optional<>` is very useful. It allows to safely handle cases where a value might not exist, very similar to what Rust does with its `Option` type.
+For this use case, the `std::optional<>` is very useful. It allows you to safely handle cases where a value might not exist, very similar to what Rust does with its `Option` type.
 
 In most typical embedded approaches (where C is king), you'd have to handle "no value" situations in messy ways: returning a null pointer (dangerous with value types), using a error value, or returning a boolean and using an output parameter. With `std::optional`, the intent is crystal clear—the value either exists or it doesn't.
 
@@ -176,7 +174,7 @@ std::optional<RollPitch> getStoredOffset() {
 }
 ```
 
-Then on the caller, instead of if cases handling the exceptions, in one line I can define the expected reaction to all use case:
+Then in the caller, instead of multiple if cases handling the exceptions, in one line I can define the expected reaction to all use cases:
 
 ```cpp
     {
@@ -189,33 +187,132 @@ This is much more expressive than older approaches. Just like in Rust where you 
 
 ### New Inclinometer screen
 
-To introduce the reset button, I also wanted to create a new inclinometer screen, the last one had a very good performance and gave me the exact information I wanted, from a engineering perspective, thats good enough, but its not pretty and not flashy.
+To introduce the reset button, I also wanted to create a new inclinometer screen. The last one had very good performance and gave me the exact information I wanted. From an engineering perspective, that's good enough, but it's not pretty and not flashy.
 So I entirely created a new screen. I wanted to have something that shows a small picture of my car and also look colorful. After sleeping on the topic, I came up with this design:
 
+{{< figure src="/images/PajeroProjects/ESP32TouchScreen/InclinometerNew.png" alt="New Inclinometer" caption="New Inclinometer" width="50%" >}}
+
+Pretty schwifty right? :smile:
+
+On the top we can see the roll, both the real value and also a rotating silhouette and on the bottom it shows the pitch in the same fashion.
+
+I had to find a way to include the reset button without breaking the visuals, so I thought, what if I build the screen where we see a sandy horizon and the sun peeking on the top is my reset button?
+
+I think it turned out pretty cool, and much more artistic than what I'm used to creating.
 
 
+## New Configuration screen
 
-## New Configuration and Wifi screens
+I also wanted to create a new configuration screen with features like brightness control and the ability to erase the entirety of the stored flash.
+
+It also made sense that both wifi configuration and OTA update screens should be available to the user out of this screen.
+
+Therefore, this is what I came up with:
+
+{{< figure src="/images/PajeroProjects/ESP32TouchScreen/MainConfigScreen.png" alt="New Configuration Screen" caption="New Configuration Screen" width="50%" >}}
+
+I don't really understand why, but Squareline exports the screen in a rectangular shape. Of course, in the real application the screen is round.
 
 ## Wifi Provisioning and why I didnt do this earlier
 
-## OTA cheat
+So in the old application, the only way to connect to a WiFi network was either by using the hardcoded connections, or by writing the password on this tiny screen, which proved difficult.
 
-## This was just dumb
+{{< figure src="/images/PajeroProjects/ESP32TouchScreen/ManualWifi.png" alt="Manual Wifi" caption="Manual Wifi setup" width="50%" >}}
+
+Luckily, I stumbled into the [ESP provisioning][ESP_Provisioning] library. To be honest, I have no clue why I didn't find this earlier, but this should be my strategy from the beginning.
+
+{{< figure src="/images/PajeroProjects/ESP32TouchScreen/Wifi.png" alt="New Wifi" caption="New Wifi Setup" width="50%" >}}
+
+Therefore, this brought huge changes to the wifi manager state machine.
+
+### The State Machine Approach
+
+The old WiFi code was basically a mess of if-else statements and flags scattered all over the place. The new approach uses a **finite state machine (FSM)** to manage WiFi provisioning and connection, which is a much cleaner way to handle all the different scenarios the system needs to deal with.
+
+Instead of having loose code trying to manage everything at once, the state machine has discrete states that the WiFi manager moves through. Each state has specific entry/exit conditions and knows exactly what to do. This makes the code way more predictable and testable.
+
+Here's the complete state machine flow:
+
+{{< mermaid >}}
+graph TB
+    INIT["<b>INIT</b><br/>System startup<br/>NVS/WiFi initialized"]
+    READY_PROV["<b>READY_TO_PROVISION</b><br/>No stored WiFi credentials<br/>Waiting for provisioning"]
+    PROVISIONING["<b>PROVISIONING</b><br/>SoftAP active (PROV_SSID)<br/>Listening for mobile app"]
+    PROVISIONED["<b>PROVISIONED</b><br/>Credentials received<br/>Deinit provisioning mgr"]
+    READY_CONNECT["<b>READY_TO_CONNECT</b><br/>Credentials loaded<br/>Ready for connection"]
+    SCANNING_READY["<b>SCANNING_READY</b><br/>Preparing WiFi scan<br/>esp_wifi_set_mode(STA)"]
+    SCANNING["<b>SCANNING</b><br/>WiFi AP scan in progress<br/>esp_wifi_scan_start() running"]
+    SCANNING_DONE["<b>SCANNING_FINISHED</b><br/>Scan results available<br/>Checking for known networks"]
+    CONNECTING["<b>CONNECTING</b><br/>Attempting connection<br/>esp_wifi_connect() called"]
+    CONNECTED["<b>CONNECTED</b><br/>Associated + IP acquired<br/>Ready for application"]
+    DISCONNECTED["<b>DISCONNECTED</b><br/>Lost WiFi connection<br/>Will retry scanning"]
+    CONN_FAILED["<b>CONNECTION_FAILED</b><br/>Connection attempt failed<br/>Will retry or restart"]
+
+    %% First Boot Path (Unprovisioned)
+    INIT -->|"No provisioning in NVS"| READY_PROV
+    READY_PROV -->|"WifiManagerTask():<br/>switch(READY_TO_PROVISION)"| PROVISIONING
+    
+    %% Provisioning Flow
+    PROVISIONING -->|"NETWORK_PROV_WIFI_CRED_RECV"| PROVISIONING
+    PROVISIONING -->|"NETWORK_PROV_WIFI_CRED_SUCCESS"| PROVISIONED
+    PROVISIONING -->|"NETWORK_PROV_WIFI_CRED_FAIL"| PROVISIONING
+    PROVISIONING -->|"NETWORK_PROV_END"| PROVISIONED
+    PROVISIONING -->|"WifiProvAppCallback():<br/>credentials stored"| PROVISIONED
+    
+    %% After Provisioning/Auto-Connect Path
+    INIT -->|"Provisioning in NVS"| PROVISIONED
+    PROVISIONED -->|"Load WiFi config<br/>from NVS"| READY_CONNECT
+    
+    %% Manual Connection Path
+    READY_CONNECT -->|"WifiConnectRequest(ssid, pwd)"| CONNECTING
+    
+    %% Scanning Path
+    READY_CONNECT -->|"No known networks yet<br/>Start scan"| SCANNING_READY
+    SCANNING_READY -->|"changeStatus()<br/>Initiate scan"| SCANNING
+    SCANNING -->|"pendingScanResults_<br/>flag set by ISR"| SCANNING_DONE
+    SCANNING_DONE -->|"Known SSID found<br/>in scan results"| READY_CONNECT
+    SCANNING_DONE -->|"No known SSID found<br/>Retry scan"| SCANNING_READY
+    SCANNING_DONE -->|"Already transitioning<br/>to CONNECTING"| CONNECTING
+    
+    %% Connection Path
+    READY_CONNECT -->|"Auto-connect to<br/>provisioned SSID"| CONNECTING
+    CONNECTING -->|"WIFI_EVENT_STA_CONNECTED"| CONNECTING
+    CONNECTING -->|"IP_EVENT_STA_GOT_IP"| CONNECTED
+    
+    %% Online State
+    CONNECTED -->|"Periodic polling<br/>Every 1000ms"| CONNECTED
+    CONNECTED -->|"WIFI_EVENT_STA_DISCONNECTED"| DISCONNECTED
+    
+    %% Recovery Paths
+    DISCONNECTED -->|"WifiManagerTask():<br/>switch(DISCONNECTED)"| SCANNING_READY
+    CONN_FAILED -->|"Manual retry or<br/>auto-restart"| SCANNING_READY
+{{< /mermaid >}}
+
+**First-Boot (Unprovisioned) Flow:**
+
+When you first power on the device, it has no WiFi credentials stored. This triggers the **provisioning flow**:
+
+1. Device enters `READY_TO_PROVISION` state and creates a SoftAP (Software Access Point) with a name like `PROV_XXXXX`
+2. You connect to this WiFi hotspot from your phone or computer
+3. The ESP provisioning library handles the UI to let you enter your home WiFi SSID and password
+4. Device transitions to `PROVISIONING` state, attempting to connect with those credentials
+5. On success, it moves to `PROVISIONED` state and stores the credentials in NVS (Non-Volatile Storage) on the flash
+6. From then on, it never needs provisioning again
 
 
 ## Conclusion
 
+From v1.0.0 to v1.2.0, this project evolved from a basic inclinometer with wifi into a robust usable inclinometer with wifi. The panic fixes taught me that even debug logging in event handlers can wreak havoc and let the main task handle it. The offset feature makes the inclinometer truly practical for the application, and the WiFi provisioning refactor transformed it from clunky to actually usable.
+
+Sometimes scope creep gets you closer to what you actually needed all along.
 
 If you found this project interesting or useful, please consider supporting my work:
 
 [☕ Buy me a coffee][buymeacoffee]
 
-The code is available on GitHub and released under MIT license - feel free to use, modify, and share!
-
 ---
 
-
+[ESP_Provisioning]:https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/provisioning/provisioning.html
 [CarTSmD-v1.2.0]:https://github.com/CarlosAlmeida4/CarTouchScreenMiniDisplay_ESP32S3/releases/tag/CarTSmD-v1.2.0
 [CarTSmD-v1.0.0]:https://github.com/CarlosAlmeida4/CarTouchScreenMiniDisplay_ESP32S3/releases/tag/CarTSmD-v1.0.0
 [CarInclinometerProject]:/projects/pajerocentralscreenminidashboard/
