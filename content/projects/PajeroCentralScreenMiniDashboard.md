@@ -396,6 +396,6 @@ If you found this project useful, consider supporting my work:
 
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [esp32_s3_post]: /posts/ESP32S3InclinometerwithTouchscreen
-[esp32_s3_post2]: /posts/CarTouchScreeMiniDisplayV120
+[esp32_s3_post2]: /posts/cartouchscreeminidisplayv120
 
 [printables]: https://www.printables.com/model/1638462-mitsubishi-pajero-mk2-inclinometer-dashboard-repla
