@@ -8,6 +8,9 @@ series: ["Pajero"]
 draft: false
 spell: ["LVGL", "QSPI"]
 ---
+# **New update available**
+
+- [Car Touchscreen display update][esp32_s3_post2]
 
 ### Table of contents
 1. [Introduction](#introduction)
@@ -15,6 +18,8 @@ spell: ["LVGL", "QSPI"]
 3. [Real-Time Processing & Task Scheduling](#real-time-processing--task-scheduling)
 4. [3D Design](#3d-design)
 5. [Conclusion](#conclusion)
+
+
 
 # Introduction
 
@@ -391,4 +396,6 @@ If you found this project useful, consider supporting my work:
 
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [esp32_s3_post]: /posts/ESP32S3InclinometerwithTouchscreen
+[esp32_s3_post2]: /posts/CarTouchScreeMiniDisplayV120
+
 [printables]: https://www.printables.com/model/1638462-mitsubishi-pajero-mk2-inclinometer-dashboard-repla
