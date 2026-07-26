@@ -7,6 +7,9 @@ categories: ["Software"]
 series: ["Pajero"]
 draft: false
 ---
+
+{{< youtube vR02NbJ9GOg >}}
+
 # What's new
 
 This is a continuation of my [inclinometer][CarInclinometerProject], where I talk about my objective, the software developed and also how I integrated it into my beloved Pajero. 

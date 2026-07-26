@@ -10,6 +10,8 @@ spell: ["LVGL", "QSPI"]
 ---
 # **New update available**
 
+{{< youtube vR02NbJ9GOg >}}
+
 - [Car Touchscreen display update][esp32_s3_post2]
 
 ### Table of contents
