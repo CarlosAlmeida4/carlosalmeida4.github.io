@@ -1,3 +1,4 @@
+
 ---
 title: "Investigation into the Pajero temperature gauge and sensor"
 date: "2026-09-27"
@@ -27,15 +28,15 @@ The Pajero 4M40 uses two separate components for temperature measurement:
 These are physically different units, mounted in the engine block, and they serve different purposes.
 The wiring diagram for the engine compartment (page 49, section 2A-32) shows how both are wired:
 
-{{< figure src="/images/PajeroProjects/WiringDiagramTempSensor.png" alt="Wiring Diagram" caption="Engine compartment wiring - temp gauge unit and sensor" width="100%" >}}
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/WiringDiagramTempSensor.png" alt="Wiring Diagram" caption="Engine compartment wiring - temp gauge unit and sensor" width="50%" >}}
 
 The location of both sensors in the engine can be seen below:
 
-{{< figure src="/images/PajeroProjects/TempSensorLocation.png" alt="Sensor Location" caption="Coolant temperature sensor location on the 4M40" width="75%" >}}
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/TempSensorLocation.png" alt="Sensor Location" caption="Coolant temperature sensor location on the 4M40" width="75%" >}}
 
 The troubleshooting guide for the meter and gauge circuit (section 4A-150, page 247) also provides useful diagnostic steps and the expected resistance values for the gauge sender:
 
-{{< figure src="/images/PajeroProjects/TroubleshootNotes.png" alt="Troubleshoot Notes" caption="Troubleshoot notes from the 4M40 workshop manual" width="75%" >}}
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/TroubleshootNotes.png" alt="Troubleshoot Notes" caption="Troubleshoot notes from the 4M40 workshop manual" width="75%" >}}
 
 # Sensor Behaviour
 
@@ -111,6 +112,81 @@ With a calibrated thermometer and high-resolution multimeter, I mapped out the r
 | **72 °C** | 418 |
 | **75 °C** | 366 |
 | **80 °C** | 320 |
+
+<div class="sensor-graph" style="margin: 30px auto; width: 100%;">
+<svg viewBox="0 0 600 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="max-width: 850; display: block; margin: 0 auto;">
+<title>Coolant Temp Sensor (A-113) Resistance vs Temperature Curve</title>
+<g stroke="currentColor" stroke-width="1" stroke-dasharray="4,4" opacity="0.15">
+<line x1="60" y1="40" x2="60" y2="350" />
+<line x1="152.7" y1="40" x2="152.7" y2="350" />
+<line x1="245.5" y1="40" x2="245.5" y2="350" />
+<line x1="338.2" y1="40" x2="338.2" y2="350" />
+<line x1="430.9" y1="40" x2="430.9" y2="350" />
+<line x1="523.6" y1="40" x2="523.6" y2="350" />
+<line x1="570" y1="40" x2="570" y2="350" />
+</g>
+<g stroke="currentColor" stroke-width="1" stroke-dasharray="4,4" opacity="0.15">
+<line x1="60" y1="350" x2="570" y2="350" />
+<line x1="60" y1="298.3" x2="570" y2="298.3" />
+<line x1="60" y1="246.7" x2="570" y2="246.7" />
+<line x1="60" y1="195.0" x2="570" y2="195.0" />
+<line x1="60" y1="143.3" x2="570" y2="143.3" />
+<line x1="60" y1="91.7" x2="570" y2="91.7" />
+<line x1="60" y1="40" x2="570" y2="40" />
+</g>
+<g stroke="currentColor" stroke-width="1.5">
+<line x1="60" y1="40" x2="60" y2="350" stroke-linecap="round" />
+<line x1="60" y1="350" x2="570" y2="350" stroke-linecap="round" />
+</g>
+<g font-size="10" font-family="system-ui, -apple-system, sans-serif" fill="currentColor" text-anchor="middle" dominant-baseline="hanging">
+<text x="60" y="358">30°C</text>
+<text x="152.7" y="358">40°C</text>
+<text x="245.5" y="358">50°C</text>
+<text x="338.2" y="358">60°C</text>
+<text x="430.9" y="358">70°C</text>
+<text x="523.6" y="358">80°C</text>
+<text x="570" y="358">85°C</text>
+</g>
+<g font-size="10" font-family="system-ui, -apple-system, sans-serif" fill="currentColor" text-anchor="end" dominant-baseline="central">
+<text x="50" y="350">0</text>
+<text x="50" y="298.3">300 Ω</text>
+<text x="50" y="246.7">600 Ω</text>
+<text x="50" y="195.0">900 Ω</text>
+<text x="50" y="143.3">1200 Ω</text>
+<text x="50" y="91.7">1500 Ω</text>
+<text x="50" y="40">1800 Ω</text>
+</g>
+<text x="315" y="390" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="currentColor">Temperature (°C)</text>
+<text transform="rotate(-90)" x="-195" y="15" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="currentColor">Resistance (Ω)</text>
+<path d="M 60,60.8 L 106.4,110.8 L 152.7,151.0 L 199.1,183.3 L 245.5,209.4 L 291.8,230.7 L 338.2,248.2 L 384.5,262.6 L 430.9,274.6 L 477.3,284.6 L 523.6,294.9 L 570.0,301.7" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" opacity="0.8" />
+<path d="M 69.3,51.9 L 134.2,58.1 L 310.4,244.1 L 449.5,278.0 L 477.3,287.0 L 523.6,294.9" fill="none" stroke="#3b82f6" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+<g fill="#ef4444" stroke="#ffffff" stroke-width="1.5">
+<circle cx="69.3" cy="51.9" r="5" />
+<circle cx="134.2" cy="58.1" r="5" />
+<circle cx="310.4" cy="244.1" r="5" />
+<circle cx="449.5" cy="278.0" r="5" />
+<circle cx="477.3" cy="287.0" r="5" />
+<circle cx="523.6" cy="294.9" r="5" />
+</g>
+<g font-size="9" font-family="system-ui, -apple-system, sans-serif" font-weight="600" fill="currentColor">
+<text x="76" y="46" text-anchor="start">31°C, 1731Ω</text>
+<text x="142" y="54" text-anchor="start">38°C, 1695Ω</text>
+<text x="318" y="237" text-anchor="start">57°C, 615Ω</text>
+<text x="435" y="272" text-anchor="end">72°C, 418Ω</text>
+<text x="477.3" y="306" text-anchor="middle">75°C, 366Ω</text>
+<text x="531" y="291" text-anchor="start">80°C, 320Ω</text>
+</g>
+<g font-size="10" font-family="system-ui, -apple-system, sans-serif" fill="currentColor">
+<rect x="345" y="45" width="220" height="55" rx="4" fill="currentColor" opacity="0.05" />
+<rect x="345" y="45" width="220" height="55" rx="4" fill="none" stroke="currentColor" opacity="0.15" />
+<line x1="355" y1="60" x2="385" y2="60" stroke="#3b82f6" stroke-width="3" />
+<circle cx="370" cy="60" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1" />
+<text x="395" y="60" dominant-baseline="central" font-weight="600">Measured (A-113 sensor)</text>
+<line x1="355" y1="80" x2="385" y2="80" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3" />
+<text x="395" y="80" dominant-baseline="central" opacity="0.85">Fitted NTC Model (β = 3550K)</text>
+</g>
+</svg>
+</div>
 
 ---
 
