@@ -11,12 +11,36 @@ draft: false
 
 # Introduction
 
-As some of you may know I own a 1994 Mitsubishi Pajero 4M40 which I have been slowly improving over the years.
+As presented in other articles, I own a Mitsubishi Pajero which I have keep as a project car.
 Recently I noticed a worrying symptom: when driving above 3000 RPM under load, coolant would start appearing in the expansion tank, suggesting pressure was building up in the cooling circuit.
 The strange part was that the temperature gauge on the dashboard never showed any sign of overheating during these events.
 
-This raised an immediate question: is the engine actually overheating and the gauge is lying, or is something else causing the pressure build-up?
-This post documents my investigation into the coolant temperature sensor and gauge circuit to try to answer that.
+This raised an immediate question: What is wrong with my cooling circuit?
+I immediately went for the [5 Whys] technique.
+1. Coolant increased drastically in the expansion tank - **Why?**
+2. Because pressure increased in the radiator - **Why?**
+3. The radiator cap didnt allow for coolant to go back to the radiator - **Why?**
+4. Because pressure was higher than what is usually expected in the cooling circuit - **Why?**
+5. Something is creating pressure in the cooling circuit - **why?**
+
+Here started the mechanical investigation, where I started by:
+
+➞ **Changing the radiator cap**: A bad radiator cap could lead to coolant not returning to the rad and its cheap to replace, this wasnt the issue.
+
+➞ **Changing the radiator**: My radiator was gunked up with rust smush, a blocked radiator could also to this behvaior I replaced it and kept having the same problem.
+
+➞ **Verify the water pump**: If the water pump was bad or air locked in some way, it could be cavitating or something and creating more pressure than expected, I inspected it and everything was fine.
+
+While replacing the radiator I took the time to also replace the thermostat, the old one was fine but was all rusty aswell.
+So, the only other thing creating pressure in the circuit was a blown headgasket, which was the most probable cause, but still is one of the most expensive repairs.
+
+At this point I handed it to a mechanic, as this job is a bit to much for me and I prefer have someone dedicated to it instead of me trying to do it.
+
+Still, I was left wondering, I never actually saw the temperature rise above the normal operating temperature, how could it have broken the head gasket?
+
+So I decided to do a deep dive on the temperature gauge circuit and figure out the hardware.
+
+This post documents my investigation into the coolant temperature sensor and gauge circuit to try understand the situation.
 
 # The Circuit
 
@@ -249,3 +273,4 @@ If you like my projects please consider supporting my hobby by [buying me a coff
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [CarInclinometer]: /posts/carinclinometer/
 [ntc_theory]: https://www.electronics-tutorials.ws/io/thermistors.html
+[5 Whys]:https://en.wikipedia.org/wiki/Five_whys
