@@ -11,7 +11,7 @@ draft: false
 
 # Introduction
 
-As presented in other articles, I own a Mitsubishi Pajero which I have keep as a project car.
+As presented in other articles, I own a Mitsubishi Pajero which I have kept as a project car.
 Recently I noticed a worrying symptom: when driving above 3000 RPM under load, coolant would start appearing in the expansion tank, suggesting pressure was building up in the cooling circuit.
 The strange part was that the temperature gauge on the dashboard never showed any sign of overheating during these events.
 
@@ -19,28 +19,28 @@ This raised an immediate question: What is wrong with my cooling circuit?
 I immediately went for the [5 Whys] technique.
 1. Coolant increased drastically in the expansion tank - **Why?**
 2. Because pressure increased in the radiator - **Why?**
-3. The radiator cap didnt allow for coolant to go back to the radiator - **Why?**
+3. The radiator cap didn't allow for coolant to go back to the radiator - **Why?**
 4. Because pressure was higher than what is usually expected in the cooling circuit - **Why?**
 5. Something is creating pressure in the cooling circuit - **why?**
 
 Here started the mechanical investigation, where I started by:
 
-➞ **Changing the radiator cap**: A bad radiator cap could lead to coolant not returning to the rad and its cheap to replace, this wasnt the issue.
+➞ **Changing the radiator cap**: A bad radiator cap could lead to coolant not returning to the rad and it's cheap to replace, this wasn't the issue.
 
-➞ **Changing the radiator**: My radiator was gunked up with rust smush, a blocked radiator could also to this behvaior I replaced it and kept having the same problem.
+➞ **Changing the radiator**: My radiator was gunked up with rust smush, a blocked radiator could also lead to this behavior. I replaced it and kept having the same problem.
 
-➞ **Verify the water pump**: If the water pump was bad or air locked in some way, it could be cavitating or something and creating more pressure than expected, I inspected it and everything was fine.
+➞ **Verify the water pump**: If the water pump was bad or air-locked in some way, it could be cavitating or something and creating more pressure than expected, I inspected it and everything was fine.
 
-While replacing the radiator I took the time to also replace the thermostat, the old one was fine but was all rusty aswell.
-So, the only other thing creating pressure in the circuit was a blown headgasket, which was the most probable cause, but still is one of the most expensive repairs.
+While replacing the radiator I took the time to also replace the thermostat, the old one was fine but was all rusty as well.
+So, the only other thing creating pressure in the circuit was a blown head gasket, which was the most probable cause, but is still one of the most expensive repairs.
 
-At this point I handed it to a mechanic, as this job is a bit to much for me and I prefer have someone dedicated to it instead of me trying to do it.
+At this point I handed it to a mechanic, as this job is a bit too much for me and I prefer to have someone dedicated to it instead of me trying to do it.
 
 Still, I was left wondering, I never actually saw the temperature rise above the normal operating temperature, how could it have broken the head gasket?
 
 So I decided to do a deep dive on the temperature gauge circuit and figure out the hardware.
 
-This post documents my investigation into the coolant temperature sensor and gauge circuit to try understand the situation.
+This post documents my investigation into the coolant temperature sensor and gauge circuit to try to understand the situation.
 
 # The Circuit
 
@@ -62,49 +62,6 @@ The troubleshooting guide for the meter and gauge circuit (section 4A-150, page 
 
 {{< figure src="/images/PajeroProjects/CoolantTempInvestigation/TroubleshootNotes.png" alt="Troubleshoot Notes" caption="Troubleshoot notes from the 4M40 workshop manual" width="75%" >}}
 
-# Sensor Behaviour
-
-The temperature gauge sender (A-104) is a **NTC thermistor** (Negative Temperature Coefficient), meaning its resistance *decreases* as temperature *increases*.
-This is the standard approach for coolant temperature senders — at low temperatures the resistance is high, and the gauge needle sits low; as the engine warms up, resistance drops and the needle rises.
-
-The relationship between resistance and temperature is given by the simplified [Beta model][ntc_theory]:
-
-$$
-R(T) = R_0 \cdot e^{\beta \left(\frac{1}{T} - \frac{1}{T_0}\right)}
-$$
-
-Where:
-- $R_0$ is the resistance at reference temperature $T_0$ (in Kelvin)
-- $T$ is the temperature of interest (in Kelvin)
-- $\beta$ is the material constant of the thermistor — a value that describes the steepness of the resistance curve, typically **3000–5000 K** for automotive NTC sensors
-
-Rearranging the formula allows us to extract $\beta$ from any two known resistance/temperature pairs:
-
-$$
-\beta = \frac{\ln(R_1/R_2)}{\dfrac{1}{T_1} - \dfrac{1}{T_2}}
-$$
-
-# Sensor Behaviour
-
-The temperature gauge sender (A-104) is a **NTC thermistor** (Negative Temperature Coefficient), meaning its resistance *decreases* as temperature *increases*.
-This is the standard approach for coolant temperature senders — at low temperatures the resistance is high, and the gauge needle sits low; as the engine warms up, resistance drops and the needle rises.
-
-The relationship between resistance and temperature is given by the simplified [Beta model][ntc_theory]:
-
-$$
-R(T) = R_0 \cdot e^{\beta \left(\frac{1}{T} - \frac{1}{T_0}\right)}
-$$
-
-Where:
-- $R_0$ is the resistance at reference temperature $T_0$ (in Kelvin)
-- $T$ is the temperature of interest (in Kelvin)
-- $\beta$ is the material constant of the thermistor — a value that describes the steepness of the resistance curve, typically **3000–5000 K** for automotive NTC sensors
-
-Rearranging the formula allows us to extract $\beta$ from any two known resistance/temperature pairs:
-
-$$
-\beta = \frac{\ln(R_1/R_2)}{\dfrac{1}{T_1} - \dfrac{1}{T_2}}
-$$
 
 # Hardware Investigation
 
@@ -118,15 +75,25 @@ First, to understand what resistance values the dashboard's bimetallic temperatu
 
 | Wire Resistance to Ground (Ω) | Needle Position / Dashboard Reading | Meaning of State |
 |---|---|---|
-| **67 Ω** | Reaches "middle" (beginning of centered region) | Normal cold-to-warm transition |
-| **47 Ω** | Center of normal range (ideal operating position) | Normal warmed-up operating state |
+| **47 Ω** | Reaches "middle" (beginning of centered region) | Normal cold-to-warm transition |
+| **32 Ω** | Center of normal range (ideal operating position) | Normal warmed-up operating state |
 | **20 Ω** | Starts rising above the center range | Beginning of over-temp threshold |
+
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/47Ohms.jpg" alt="Gauge Test" caption="47 Ω" width="75%" >}}
+
+---
+
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/32Ohms.jpg" alt="Gauge Test" caption="32 Ω" width="75%" >}}
+
+---
+
+{{< figure src="/images/PajeroProjects/CoolantTempInvestigation/20Ohms.jpg" alt="Gauge Test" caption="20 Ω" width="75%" >}}
 
 This test shows that the physical needle gauge expects **roughly 47–67 Ω of resistance** during normal fully-warmed operation, and anything **below ~20 Ω** should result in a rising needle pointing towards overheating.
 
 ### 2. Measuring the Actual Coolant Temperature Sensor
 
-With a calibrated thermometer and high-resolution multimeter, I mapped out the real-world performance of the actual temperature sensor at various temperature points:
+With a gas stove, a thermometer and a multimeter, I mapped out the real-world performance of the actual temperature sensor at various temperature points:
 
 | Temperature (°C) | Measured Resistance (Ω) |
 |---|---|
@@ -262,13 +229,7 @@ The fitted model matches my experimental measurements with incredible precision,
 2. **The dashboard gauge tests remain valid**: Sourcing fixed resistance values directly in the harness proves that the physical dashboard indicator loop requires a low resistance range of 20–67 Ω to deflect the needle.
 3. **The mystery continues**: Because I was testing the ECU sensor instead of the gauge sender, I still haven't verified the status of the actual dashboard sender unit (A-104) inside the car.
 
-# Next Steps
 
-- Purchase the correct low-resistance **Gauge Sender Unit (A-104)** (single-pin connector).
-- Bench test the *correct* sender unit in the water bath to verify its low-resistance curve (nominally ~100 to 20 Ω) against the workshop manual spec-sheet.
-- Install the correct sender unit and verify if the dashboard needle finally wakes up and reflects actual driving temperatures under high engine loads.
-
-If you like my projects please consider supporting my hobby by [buying me a coffee][buymeacoffee]:coffee: :smile:
 
 [buymeacoffee]: https://buymeacoffee.com/Carlos4lmeida
 [CarInclinometer]: /posts/carinclinometer/
